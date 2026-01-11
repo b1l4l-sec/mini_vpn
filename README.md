@@ -10,7 +10,7 @@ A compact VPN prototype written in Python that demonstrates the key components o
 ## Contents / Quick Links
 
 - Overview
-- Screenshots
+- Screenshots & VPN traffic captures
 - Quick start
 - Usage
 - Configuration
@@ -34,9 +34,9 @@ Key components
 
 ---
 
-## Screenshots
+## Screenshots & VPN traffic captures
 
-Images included in the repository are integrated below for better visibility. They live at the repository root and will render on GitHub automatically.
+Images included in the repository are embedded below for better visibility. They live at the repository root and will render on GitHub automatically.
 
 ### Server: Login screen
 ![Server Login](VPNServerLoginScreen.png)
@@ -46,6 +46,20 @@ Images included in the repository are integrated below for better visibility. Th
 
 ### Client: GUI / Connected view
 ![Client Screen](VPNClientScreen.png)
+
+---
+
+## VPN Traffic Captures (Wireshark / VOPData)
+
+The following captures show example VPN traffic and packet contents captured via Wireshark during test sessions. These help illustrate encapsulation, handshake exchanges and encrypted payloads.
+
+### Capture 1 — Overview of handshake and first packets
+![VPN Wireshark Capture 1](VPNDataWireshark.png)
+
+### Capture 2 — Detailed packet flow and payload markers
+![VPN Wireshark Capture 2](VPNDataWireshark2.png)
+
+> Note: Captures are provided for inspection and educational purposes only. They contain no real user data — use only in isolated lab environments.
 
 ---
 
@@ -63,7 +77,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-3. Install (very small) requirements:
+3. Install requirements:
 ```bash
 pip install -r requirements.txt
 ```
@@ -93,7 +107,7 @@ python3 client.py
 python3 gui_client.py
 ```
 
-There are helper launch scripts for convenience:
+Helper launch scripts:
 - `launch_server.sh` / `launch_server.bat`
 - `launch_client.sh` / `launch_client.bat`
 - `launch_gui.sh` / `launch_gui.bat`
@@ -102,7 +116,7 @@ There are helper launch scripts for convenience:
 
 ## Usage & common commands
 
-- Check environment and ports:
+- Environment & port checks:
 ```bash
 python3 check_setup.py
 python3 check_ports.py
@@ -111,7 +125,6 @@ python3 check_ports.py
 - Manage users:
 ```bash
 python3 manage_users.py
-# follow prompts to add/remove users
 ```
 
 - Setup VPN networking (requires root on host):
@@ -119,7 +132,7 @@ python3 manage_users.py
 sudo python3 setup_vpn.py
 ```
 
-- To run the GUI client/server from virtualenv (Linux):
+- Run GUI from virtualenv (Linux):
 ```bash
 . .venv/bin/activate
 python3 gui_server.py
@@ -130,31 +143,32 @@ python3 gui_client.py
 
 ## Configuration
 
-Edit configuration values in `config.py` to set:
+Edit `config.py` to set:
 - network ranges / addressing
 - ports used by server/client
-- crypto parameters (recommended to keep defaults for lab)
+- crypto parameters (lab defaults recommended)
 - logging location
 
-There is a light-weight `client_config copy.json` demonstrating the client configuration fields.
+Example client config: `client_config copy.json`
 
 ---
 
 ## Implementation notes
 
-- Crypto primitives and handshake flow are implemented in `crypto.py` and `handshake.py`. This project demonstrates concepts — do not reuse keys or algorithms as-is in production.
-- Packet construction/parsing lives in `packet.py`.
-- The server maintains user sessions, assigns addresses and forwards traffic between clients and the host network.
-- The project includes simple scripts and utilities to manage users and test the setup.
+- `crypto.py` and `handshake.py` demonstrate handshake and encryption flows (educational).
+- `packet.py` handles encapsulation/parsing.
+- `dhcp_server.py` assigns addresses to connected clients.
+- `server.py` maintains sessions and forwards packets.
+- This project is modular to facilitate learning and testing.
 
 ---
 
 ## Troubleshooting & Tips
 
-- GUI fails to start: ensure dependencies and virtualenv are active.
-- Ports in use: run `lsof -i :<PORT>` and free the port or change `config.py`.
-- Permission issues for networking tasks: some scripts require root (sudo) — do not run on production hosts.
-- If you want to test with the GUI on Windows, use the provided `.bat` launchers.
+- GUI fails to start: ensure the virtualenv is activated and dependencies installed.
+- Ports in use: run `lsof -i :<PORT>` and free or change port in `config.py`.
+- Networking scripts require root; do not run on production systems.
+- Use the provided `.bat` launchers on Windows for GUI testing.
 
 ---
 
@@ -166,10 +180,10 @@ This project is for educational and lab use only. mini_vpn is not hardened for p
 
 ## Contributing
 
-Contributions and improvements are welcome. Please:
+Contributions welcome:
 1. Fork the repo
 2. Create a feature branch
-3. Open a pull request with a clear description and tests/examples
+3. Open a pull request with description and tests/examples
 
 ---
 
@@ -179,4 +193,7 @@ MIT — see the `LICENSE` file.
 
 ---
 
-Made by b1l4l-sec — feel free to ask me to commit this updated README to the repo (create branch + PR) or to produce a shorter/longer variant.  
+Made by b1l4l-sec — if you'd like I can open a branch, commit this README update and create a PR. Please tell me whether you want:
+- I: create a branch + commit + open PR, or
+- II: commit directly to main (not recommended), or
+- III: just provide this content so you can paste it yourself.
